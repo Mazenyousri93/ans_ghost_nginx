@@ -1,0 +1,24 @@
+---
+
+
+- name: install nginx
+  apt: name=nginx state=latest update_cache=yes
+
+- name: open ports 
+  ufw: rule=allow port={{item}}
+  with_items:
+  - 80
+  - 443
+  notify:
+  - restart ufw        
+
+- name: write nginx config files
+  template: src=nginx.j2 dest=/etc/nginx/nginx.conf
+
+- name: write nginx index
+  template: src=index.j2 dest=/var/www/html/index.nginx-debian.html
+- name: write virtual hosts
+  template: src=default.j2 dest=/etc/nginx/sites-enabled/default
+  notify:
+  - restart nginx    
+

@@ -1,0 +1,9 @@
+---
+- hosts: test
+  vars_prompt:
+    name: website
+    prompt: " please enter your username ? "
+    private: no
+  roles:
+     - nginx
+
