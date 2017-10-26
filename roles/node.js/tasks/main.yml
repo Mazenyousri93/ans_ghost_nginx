@@ -1,0 +1,8 @@
+---
+
+
+- name: install Node.js + npm ( Node.js Package manager )
+  apt: name= {{ item }} state=latest update_cache=yes
+  with_items:
+  - nodejs
+  - npm

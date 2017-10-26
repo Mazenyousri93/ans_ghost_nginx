@@ -2,8 +2,10 @@
 - hosts: test
   vars_prompt:
     name: website
-    prompt: " please enter your username ? "
+    prompt: " please enter your website name ? "
     private: no
   roles:
+     - ready
      - nginx
+     - node.js
 

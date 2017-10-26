@@ -1,0 +1,20 @@
+---
+
+
+- name: install initial pacakges
+  apt: name= {{ item }} state=latest update_cache=yes
+  with_items:
+  - sudo
+  - vim
+  - gcc
+  - gcc-c++
+  - autoconf
+  - automake
+  - libxml2-devel
+  - unzip
+  - htop
+  - iotop
+  - strace
+  - wget
+  - tar
+

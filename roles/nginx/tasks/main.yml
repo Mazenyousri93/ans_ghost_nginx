@@ -12,13 +12,14 @@
   notify:
   - restart ufw        
 
-- name: write nginx config files
+- name: create nginx config files
   template: src=nginx.j2 dest=/etc/nginx/nginx.conf
-
-- name: write nginx index
-  template: src=index.j2 dest=/var/www/html/index.nginx-debian.html
-- name: write virtual hosts
-  template: src=default.j2 dest=/etc/nginx/sites-enabled/default
+- name: create new root directory
+  file: path=/var/www/html/{{ website }} state=directory
+- name: create website default index
+  template: src=index.j2 dest=/var/www/html/{{ website }}/index.html
+- name: create virtual hosts
+  template: src=host.j2 dest=/etc/nginx/sites-enabled/{{ website }}
   notify:
   - restart nginx    
 
