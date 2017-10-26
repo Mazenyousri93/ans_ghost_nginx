@@ -2,7 +2,7 @@
 
 
 - name: install nginx
-  apt: name=nginx state=latest update_cache=yes
+  apt: name=nginx state=present
 
 - name: open ports 
   ufw: rule=allow port={{item}}

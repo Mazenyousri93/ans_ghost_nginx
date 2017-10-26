@@ -8,4 +8,5 @@
      - ready
      - nginx
      - node.js
+     - ghost
 

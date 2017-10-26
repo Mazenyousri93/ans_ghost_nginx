@@ -1,0 +1,37 @@
+---
+
+- name: create group for ghost
+  group:
+    name: ghost
+    state: present
+- name: Add new user for ghost
+  user:
+    name: ghost
+    group: ghost
+
+- name: download Ghost Source and Extract it in Document root
+  unarchive: 
+    src: https://ghost.org/zip/ghost-latest.zip 
+    dest: /var/www/html/{{ website }}
+    remote_src: yes
+
+
+- name: Install Ghost
+  npm: 
+    path: /var/www/html/{{ website }} 
+    state: latest 
+    production: yes
+    
+- name: Configure Nginx as a reverse proxy 
+  template: src=ghost.j2 dest=/etc/nginx/sites-enabled/ghost
+  notify:
+  - restart nginx
+
+- name: Give it ownership over directory
+  file: path=/var/www/html/{{ website }}/ owner=ghost group=ghost mode=0755 recurse=yes
+
+- name: Configure Ghost as a system service
+  template: src=ghost.service.j2 dest=/etc/systemd/system/ghost.service
+  notify:
+  - restart ghost
+

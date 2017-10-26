@@ -1,8 +1,11 @@
 ---
 
 
+
+- name: install Node.js PPA
+  script: setup.sh
+
+- name: install nginx
+  apt: name=nodejs state=present
 - name: install Node.js + npm ( Node.js Package manager )
-  apt: name= {{ item }} state=latest update_cache=yes
-  with_items:
-  - nodejs
-  - npm
+  apt: name=build-essential state=present update_cache=yes

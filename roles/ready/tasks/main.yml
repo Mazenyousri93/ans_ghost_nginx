@@ -1,20 +1,26 @@
 ---
 
 
-- name: install initial pacakges
-  apt: name= {{ item }} state=latest update_cache=yes
-  with_items:
-  - sudo
-  - vim
-  - gcc
-  - gcc-c++
-  - autoconf
-  - automake
-  - libxml2-devel
-  - unzip
-  - htop
-  - iotop
-  - strace
-  - wget
-  - tar
+- name: install sudo
+  apt: name=sudo state=latest update_cache=yes
+- name: install vim
+  apt: name=vim state=latest update_cache=yes
+- name: install gcc
+  apt: name=gcc state=latest update_cache=yes
+- name: install autoconf
+  apt: name=autoconf state=latest update_cache=yes
+- name: install automake
+  apt: name=automake state=latest update_cache=yes
+- name: install unzip
+  apt: name=unzip state=latest update_cache=yes
+- name: install htop
+  apt: name=htop state=latest update_cache=yes
+- name: install iotop
+  apt: name=iotop state=latest update_cache=yes
+- name: install curl
+  apt: name=curl state=latest update_cache=yes
+- name: install wget
+  apt: name=wget state=latest update_cache=yes
+- name: install tar
+  apt: name=tar state=latest update_cache=yes
 
