@@ -7,6 +7,6 @@
   roles:
      - ready
      - nginx
-     - node.js
+     - node.js     
      - ghost
 

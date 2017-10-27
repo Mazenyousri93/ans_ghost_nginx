@@ -9,29 +9,48 @@
     name: ghost
     group: ghost
 
-- name: download Ghost Source and Extract it in Document root
+- name: Download ghost Source
+  get_url:
+    url: https://ghost.org/zip/ghost-latest.zip
+    dest: /var/www/html/{{ website }}/ghost-latest.zip
+    mode: 0777
+
+- name: Unzip Source Code
   unarchive: 
-    src: https://ghost.org/zip/ghost-latest.zip 
+    src: /var/www/html/{{ website }}/ghost-latest.zip
     dest: /var/www/html/{{ website }}
     remote_src: yes
 
 
-- name: Install Ghost
+- name: Install Ghost with npm
   npm: 
     path: /var/www/html/{{ website }} 
     state: latest 
     production: yes
-    
+  become_user: ghost
+- name: Configure Ghost
+  template: src=config.j2 dest=/var/www/html/{{ website }}/config.js
+
+
 - name: Configure Nginx as a reverse proxy 
   template: src=ghost.j2 dest=/etc/nginx/sites-enabled/ghost
   notify:
   - restart nginx
 
-- name: Give it ownership over directory
+- name: Give ghost user ownership over the root directory
   file: path=/var/www/html/{{ website }}/ owner=ghost group=ghost mode=0755 recurse=yes
 
+- name: set permissions over rooy directory
+  acl:
+    path: /var/www/html/{{ website }}/
+    entity: root
+    etype: user
+    permissions: rwX
+    state: present
+
+
 - name: Configure Ghost as a system service
-  template: src=ghost.service.j2 dest=/etc/systemd/system/ghost.service
+  template: src=ghost.service.j2 dest=/lib/systemd/system/ghost.service
   notify:
   - restart ghost
 
