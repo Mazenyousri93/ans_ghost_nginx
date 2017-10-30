@@ -5,7 +5,7 @@
 - name: install Node.js PPA
   script: setup.sh
 
-- name: install nginx
+- name: install Node.js
   apt: name=nodejs state=present
-- name: install Node.js + npm ( Node.js Package manager )
+- name: npm ( Node.js Package manager )
   apt: name=build-essential state=present update_cache=yes

@@ -1,12 +1,15 @@
 ---
 - hosts: test
   vars_prompt:
-    name: website
-    prompt: " please enter your website name ? "
-    private: no
+  -  name: website
+     prompt: " please enter your website name ? "
+     private: no
+  -  name: mysql_passwd
+     prompt: " please enter your Mysql root password ? "
   roles:
      - ready
      - nginx
-     - node.js     
-     - ghost
+     - mysql
+     - node.js
+     - ghost 
 

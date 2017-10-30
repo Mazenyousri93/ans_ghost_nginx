@@ -9,48 +9,23 @@
     name: ghost
     group: ghost
 
-- name: Download ghost Source
-  get_url:
-    url: https://ghost.org/zip/ghost-latest.zip
-    dest: /var/www/html/{{ website }}/ghost-latest.zip
-    mode: 0777
+- name: Create new root directory
+  file: path=/var/www/html/ghost/{{ website }} state=directory owner=ghost group=ghost
 
-- name: Unzip Source Code
-  unarchive: 
-    src: /var/www/html/{{ website }}/ghost-latest.zip
-    dest: /var/www/html/{{ website }}
-    remote_src: yes
-
-
-- name: Install Ghost with npm
+- name: Install Ghost-cli Pacakge
   npm: 
-    path: /var/www/html/{{ website }} 
+    name: ghost-cli
+    global: yes
     state: latest 
     production: yes
-  become_user: ghost
-- name: Configure Ghost
-  template: src=config.j2 dest=/var/www/html/{{ website }}/config.js
 
+#- name: Clean root directory 
+#  shell: "/bin/rm -rf path=/var/www/html/{{ website }}/*"
 
-- name: Configure Nginx as a reverse proxy 
-  template: src=ghost.j2 dest=/etc/nginx/sites-enabled/ghost
-  notify:
-  - restart nginx
-
-- name: Give ghost user ownership over the root directory
-  file: path=/var/www/html/{{ website }}/ owner=ghost group=ghost mode=0755 recurse=yes
-
-- name: set permissions over rooy directory
-  acl:
-    path: /var/www/html/{{ website }}/
-    entity: root
-    etype: user
-    permissions: rwX
-    state: present
-
-
-- name: Configure Ghost as a system service
-  template: src=ghost.service.j2 dest=/lib/systemd/system/ghost.service
+- name: Configure & Setup Ghost
+  shell: "ghost install --url=http://{{ website }} --db=mysql --dbhost=localhost --dbuser=root --dbpass={{ mysql_passwd }} --dbname=ghost_db --no-prompt   --start"
+  args:
+    chdir: /var/www/html/ghost/{{ website }}
   notify:
   - restart ghost
 
